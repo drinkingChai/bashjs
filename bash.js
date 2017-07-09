@@ -1,6 +1,14 @@
 // load modules
 var commands = require('./commands');
 
+var done = function(output) {
+  // show the output
+  process.stdout.write(output);
+
+  // show the prompt
+  process.stdout.write('\nprompt > ');
+}
+
 // Output a prompt
 process.stdout.write('prompt > ');
 
@@ -11,6 +19,11 @@ process.stdin.on('data', function (data) {
   } else {
     var cmd = data.toString().trim().split(' '); // remove the newline
 
-    commands[cmd[0]](cmd.slice(1));
+    if (commands[cmd[0]]) {
+      commands[cmd[0]](cmd.slice(1), done);
+    } else {
+      process.stdout.write('Unknown command...\n');
+      process.stdout.write('prompt > ');
+    }
   }
 });
