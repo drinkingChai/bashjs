@@ -2,14 +2,14 @@ var fs = require('fs');
 var request = require('request');
 
 module.exports = {
-  pwd: function(args, done) {
+  pwd: function(stdin, args, done) {
     done(process.mainModule.paths[0]);
   },
-  date: function(args, done) {
+  date: function(stdin, args, done) {
     var date = new Date();
     done(date.toString());
   },
-  ls: function(args, done) {
+  ls: function(stdin, args, done) {
     fs.readdir('.', function(err, files) {
       if (err) throw err;
       var output = "";
@@ -19,15 +19,15 @@ module.exports = {
       done(output.trim());
     });
   },
-  echo: function(args, done) {
+  echo: function(stdin, args, done) {
     if (args[0].charAt(0) == '$' && process.env[args[0].slice(1)]) {
       done(process.env[args[0].slice(1)]);
     } else {
       done(args.join(' '));
     }
   },
-  cat: function(args, done) {
-    function read(args, done, ret) {
+  cat: function(stdin, args, done) {
+    function read(ret) {
       var ret = ret || "";
       fs.readFile(args.shift(), function(err, data) {
         if (err) throw err;
@@ -40,16 +40,16 @@ module.exports = {
       });
     }
 
-    read(args, done);
+    read();
   },
-  head: function(args, done) {
+  head: function(stdin, args, done) {
     fs.readFile(args[0], function(err, data) {
       if (err) throw err;
       var firstFive = data.toString().split('\n').slice(0, 5);
       done(firstFive.join('\n'));
     })
   },
-  tail: function(args, done) {
+  tail: function(stdin, args, done) {
     fs.readFile(args[0], function(err, data) {
       if (err) throw err;
       var stringSplit = data.toString().split('\n');
@@ -57,13 +57,13 @@ module.exports = {
       done(lastFive.join('\n'));
     })
   },
-  wc: function(args, done) {
+  wc: function(stdin, args, done) {
     fs.readFile(args[0], function(err, data) {
       if (err) throw err;
       done((data.toString().split("\n").length - 1).toString());
     })
   },
-  uniq: function(args, done) {
+  uniq: function(stdin, args, done) {
     fs.readFile(args[0], function(err, data) {
       if (err) throw err;
       var arrData = data.toString().split("\n"),
@@ -76,21 +76,25 @@ module.exports = {
       done(uniqLines.join("\n"));
     })
   },
-  sort: function(args, done) {
+  sort: function(stdin, args, done) {
     fs.readFile(args[0], function(err, data) {
       if (err) throw err;
       var stringSplit = data.toString().split('\n').map(function(item) {
-        return item.trim();
+        return item;
       });
       stringSplit.sort();
       done(stringSplit.join('\n'));
     });
   },
-  curl: function(args, done) {
+  curl: function(stdin, args, done) {
     // args[0] = args[0].slice(0, 7) === 'http://' || args[0].slice(0, 7) === 'https://' ?
     request(args[0], function(err, res, body) {
       if (err) throw err;
       done(body);
     })
+  },
+  find: function(stdin, args, done) {
+    console.log(process);
+    done("");
   }
 }

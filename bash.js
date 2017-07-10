@@ -17,10 +17,12 @@ process.stdin.on('data', function (data) {
   if (data.toString().trim() === '') {
     process.stdout.write('prompt > ');
   } else {
-    var cmd = data.toString().trim().split(' '); // remove the newline
+    // var cmd = data.toString().trim().split(' '); // remove the newline
+    var cmdString = data.toString().trim();
+    var cmdList = cmdString.split(/\s*\|\s*/g); // any amount of whitespace, pipe, any amount of whitespace
 
-    if (commands[cmd[0]]) {
-      commands[cmd[0]](cmd.slice(1), done);
+    if (commands[cmdList[0]]) {
+      commands[cmdList[0]]("",cmdList.slice(1), done);
     } else {
       process.stdout.write('Unknown command...\n');
       process.stdout.write('prompt > ');
