@@ -27,12 +27,20 @@ module.exports = {
     }
   },
   cat: function(args, done) {
-    for (var i = 0; i < args.length; i++) {
-      fs.readFile(args[i], function(err, data) {
+    function read(args, done, ret) {
+      var ret = ret || "";
+      fs.readFile(args.shift(), function(err, data) {
         if (err) throw err;
-        done(data);
+        ret += data;
+        if (args.length > 0) {
+          read(args, done, ret);
+        } else {
+          done(ret);
+        }
       });
     }
+
+    read(args, done);
   },
   head: function(args, done) {
     fs.readFile(args[0], function(err, data) {
