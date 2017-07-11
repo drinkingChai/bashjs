@@ -9,11 +9,10 @@ function date(stdin, args, done) {
 function echo(stdin, args, done) {
   if (!done) return args
 
-  if (args[0].charAt(0) == '$' && process.env[args[0].slice(1)]) {
-    done(process.env[args[0].slice(1)], stdin);
-  } else {
-    done(args.join(' '), stdin);
-  }
+  done(args.reduce(function(acc, item) {
+    if (item[0] === '$') return acc += process.env[args[0].slice(1)] + " "
+    else return acc += item + " ";
+  }, "").trim(), stdin);
 }
 
 function curl(stdin, args, done) {
