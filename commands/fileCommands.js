@@ -14,8 +14,8 @@ function cat (stdin, args, done) {
 }
 
 function head(stdin, args, done) {
-  if (stdin && !args.length) return returnOutput(null, stdin);
-  fs.readFile(args[0], returnOutput);
+  if (stdin && !args.length) returnOutput(null, stdin);
+  else fs.readFile(args[0], returnOutput);
 
   function returnOutput(err, data) {
     if (err) throw err;
@@ -24,8 +24,8 @@ function head(stdin, args, done) {
 }
 
 function tail(stdin, args, done) {
-  if (stdin && !args.length) return returnOutput(null, stdin);
-  fs.readFile(args[0], returnOutput)
+  if (stdin && !args.length) returnOutput(null, stdin);
+  else fs.readFile(args[0], returnOutput)
 
   function returnOutput(err, data) {
     if (err) throw err;
@@ -34,8 +34,8 @@ function tail(stdin, args, done) {
 }
 
 function wc(stdin, args, done) {
-  if (stdin && !args.length) return returnOutput(null, stdin);
-  fs.readFile(args[0], returnOutput);
+  if (stdin && !args.length) returnOutput(null, stdin);
+  else fs.readFile(args[0], returnOutput);
 
   function returnOutput(err, data) {
     if (err) throw err;
@@ -44,8 +44,8 @@ function wc(stdin, args, done) {
 }
 
 function uniq(stdin, args, done) {
-  if (stdin && !args.length) return returnOutput(null, stdin);
-  fs.readFile(args[0], returnOutput);
+  if (stdin && !args.length) returnOutput(null, stdin);
+  else fs.readFile(args[0], returnOutput);
 
   function returnOutput(err, data) {
     done(data.toString().split("\n").filter(function(item, i, arr) {
@@ -55,8 +55,8 @@ function uniq(stdin, args, done) {
 }
 
 function sort(stdin, args, done) {
-  if (stdin && !args.length) return returnOutput(null, stdin);
-  fs.readFile(args[0], returnOutput);
+  if (stdin && !args.length) returnOutput(null, stdin);
+  else fs.readFile(args[0], returnOutput);
 
   function returnOutput(err, data) {
     if (err) throw err;
@@ -68,8 +68,8 @@ function grep(stdin, args, done) {
   var searchStr = args[0],
     file = args[1];
 
-  if (stdin && !args[1]) return returnOutput(null, stdin);
-  fs.readFile(file, returnOutput);
+  if (stdin && !args[1]) returnOutput(null, stdin);
+  else fs.readFile(file, returnOutput);
 
   function returnOutput(err, data) {
     if (err) throw err;
