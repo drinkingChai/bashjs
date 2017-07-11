@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/drinkingChai/bashjs#readme",
   "dependencies": {
+    "chalk": "^2.0.1",
     "request": "^2.81.0"
   }
 }

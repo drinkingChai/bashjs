@@ -1,5 +1,6 @@
 // load modules
 var commands = require('./commands/index');
+var chalk = require('chalk');
 
 var done = function(output, stdin) {
   // show the output
@@ -27,7 +28,7 @@ process.stdin.on('data', function (data) {
     var initCmd = cmdList[0].split(' ')[0];
     var args = cmdList[0].split(' ').slice(1);
 
-    if (commands.hasOwnProperty(initCmd)) {
+    if (commands[initCmd]) {
       commands[initCmd](cmdList.slice(1), args, done);
     } else {
       process.stdout.write(initCmd + ' unknown command...\n');

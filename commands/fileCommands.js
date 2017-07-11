@@ -20,8 +20,7 @@ function head(stdin, args, done) {
 
   fs.readFile(args[0], function(err, data) {
     if (err) throw err;
-    var firstFive = data.toString().split('\n').slice(0, 5);
-    done(firstFive.join('\n'), stdin);
+    done(data.toString().split('\n').slice(0, 5).join('\n'), stdin);
   })
 }
 
@@ -33,9 +32,7 @@ function tail(stdin, args, done) {
 
   fs.readFile(args[0], function(err, data) {
     if (err) throw err;
-    var stringSplit = data.toString().split('\n');
-    var lastFive = stringSplit.slice(stringSplit.length - 5);
-    done(lastFive.join('\n'), stdin);
+    done(data.toString().split('\n').slice(-5).join('\n'), stdin);
   })
 }
 
@@ -50,19 +47,13 @@ function wc(stdin, args, done) {
 
 function uniq(stdin, args, done) {
   function findUniq(fileData) {
-    fileData = fileData.split("\n");
-    var uniqLines = [];
-    for (var i = 0, l = fileData.length; i < l; i++) {
-      if (uniqLines.length == 0 || fileData[i].trim() !== uniqLines[uniqLines.length - 1]) {
-        uniqLines.push(fileData[i]);
-      }
-    }
-    return uniqLines.join("\n");
+    return fileData.split("\n").filter(function(item, i, arr) {
+      if (i == 0 || item !== arr[i - 1]) return item;
+    }).join("\n");
   }
 
-  if (!done) {
-    return findUniq(args);
-  }
+  if (!done) return findUniq(args)
+
   fs.readFile(args[0], function(err, data) {
     if (err) throw err;
     done(findUniq(data.toString()), stdin);
