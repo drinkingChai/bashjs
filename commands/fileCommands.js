@@ -14,78 +14,73 @@ function cat (stdin, args, done) {
 }
 
 function head(stdin, args, done) {
-  if (!done) return args.toString().split('\n').slice(0, 5).join('\n')
+  if (stdin && !args.length) return returnOutput(null, stdin);
+  fs.readFile(args[0], returnOutput);
 
-  fs.readFile(args[0], function(err, data) {
+  function returnOutput(err, data) {
     if (err) throw err;
     done(data.toString().split('\n').slice(0, 5).join('\n'), stdin);
-  })
+  }
 }
 
 function tail(stdin, args, done) {
-  if (!done) {
-    return args.toString().split('\n').slice(-5).join('\n');
-  }
+  if (stdin && !args.length) return returnOutput(null, stdin);
+  fs.readFile(args[0], returnOutput)
 
-  fs.readFile(args[0], function(err, data) {
+  function returnOutput(err, data) {
     if (err) throw err;
     done(data.toString().split('\n').slice(-5).join('\n'), stdin);
-  })
+  }
 }
 
 function wc(stdin, args, done) {
-  if (stdin && !args.length) return getWordCount(null, stdin);
-  fs.readFile(args[0], getWordCount);
+  if (stdin && !args.length) return returnOutput(null, stdin);
+  fs.readFile(args[0], returnOutput);
 
-  function getWordCount(err, data) {
+  function returnOutput(err, data) {
     if (err) throw err;
     done((data.toString().split("\n").length), stdin);
   }
 }
 
 function uniq(stdin, args, done) {
-  function findUniq(fileData) {
-    return fileData.split("\n").filter(function(item, i, arr) {
+  if (stdin && !args.length) return returnOutput(null, stdin);
+  fs.readFile(args[0], returnOutput);
+
+  function returnOutput(err, data) {
+    done(data.toString().split("\n").filter(function(item, i, arr) {
       if (i == 0 || item !== arr[i - 1]) return item;
-    }).join("\n");
+    }).join("\n"), stdin);
   }
-
-  if (!done) return findUniq(args)
-
-  fs.readFile(args[0], function(err, data) {
-    if (err) throw err;
-    done(findUniq(data.toString()), stdin);
-  })
 }
 
 function sort(stdin, args, done) {
-  function sortLines(fileData) {
-    return fileData.split('\n').sort().join('\n');
-  }
+  if (stdin && !args.length) return returnOutput(null, stdin);
+  fs.readFile(args[0], returnOutput);
 
-  if (!done) return sortLines(args)
-
-  fs.readFile(args[0], function(err, data) {
+  function returnOutput(err, data) {
     if (err) throw err;
-    done(sortLines(data.toString()), stdin);
-  });
+    done(data.toString().split('\n').sort().join('\n'), stdin);
+  }
 }
 
 function grep(stdin, args, done) {
-  function matchLines(fileData, str) {
-    return fileData.toString().split('\n').filter(function(item) {
+  var searchStr = args[0],
+    file = args[1];
+
+  if (stdin && !args[1]) return returnOutput(null, stdin);
+  fs.readFile(file, returnOutput);
+
+  function returnOutput(err, data) {
+    if (err) throw err;
+    done(matchLines(data, searchStr), stdin);
+  }
+
+  function matchLines(data, str) {
+    return data.toString().split('\n').filter(function(item) {
       if (item.includes(str)) return item;
     }).join('\n')
   }
-
-  if (!done) return matchLines(args, stdin.shift());
-
-  var searchStr = args[0],
-    file = args[1];
-  fs.readFile(file, function(err, data) {
-    if (err) throw err;
-    done(matchLines(data, searchStr), stdin);
-  })
 }
 
 
