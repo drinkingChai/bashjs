@@ -34,12 +34,13 @@ function tail(stdin, args, done) {
 }
 
 function wc(stdin, args, done) {
-  if (!done) return (args.split("\n").length);
+  if (stdin && !args.length) return getWordCount(null, stdin);
+  fs.readFile(args[0], getWordCount);
 
-  fs.readFile(args[0], function(err, data) {
+  function getWordCount(err, data) {
     if (err) throw err;
     done((data.toString().split("\n").length), stdin);
-  })
+  }
 }
 
 function uniq(stdin, args, done) {

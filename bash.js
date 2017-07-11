@@ -2,33 +2,30 @@
 var commands = require('./commands/index');
 var chalk = require('chalk');
 
+
+var prompt = '\nprompt > ';
+var cmdList = [];
+
 var done = function(output, stdin) {
-  // show the output
-  while(stdin.length) {
-    var pipeCmdList = stdin.shift().split(' ');
-    if (pipeCmdList.length > 1) stdin.unshift(pipeCmdList[1]);
-    output = commands[pipeCmdList[0]](stdin, output);
-  }
-  process.stdout.write(output + '\nprompt > ');
+  if (cmdList.length) pipe(cmdList.shift(), output);
+  else process.stdout.write(output + prompt);
 }
 
-// Output a prompt
-process.stdout.write('prompt > ');
+var pipe = function(cmdString, lastOutput) {
+  var cmdSplit = cmdString.split(' ');
+  var cmd = cmdSplit[0];
+  var args = cmdSplit.slice(1);
 
-// The stdin 'data' event fires after a user types in a line
+  if (commands[cmd]) commands[cmd](lastOutput, args, done);
+}
+
 process.stdin.on('data', function (data) {
   if (data.toString().trim() === '') {
-    process.stdout.write('prompt > ');
+    process.stdout.write(prompt);
   } else {
-    var cmdList = data.toString().trim().split(/\s*\|\s*/g); // any amount of whitespace, pipe, any amount of whitespace
-    var initCmd = cmdList[0].split(' ')[0];
-    var args = cmdList[0].split(' ').slice(1);
-
-    if (commands[initCmd]) {
-      commands[initCmd](cmdList.slice(1), args, done);
-    } else {
-      process.stdout.write(initCmd + ' unknown command...\n');
-      process.stdout.write('prompt > ');
-    }
+    cmdList = data.toString().trim().split(/\s*\|\s*/g);
+    pipe(cmdList.shift());
   }
 });
+
+process.stdout.write(prompt);
