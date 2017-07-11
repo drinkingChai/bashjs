@@ -2,17 +2,15 @@ var fs = require('fs');
 
 
 function cat (stdin, args, done) {
-  function read(ret) {
-    var ret = ret || "";
+  var contentArr = [], i = 0;
+  (function read() {
     fs.readFile(args.shift(), function(err, data) {
       if (err) throw err;
-      ret += data;
-      if (args.length > 0) read(args, done, ret);
-      else done(ret, stdin);
+      contentArr[i++] = data;
+      if (args.length > 0) read();
+      else done(contentArr.join(''), stdin);
     });
-  }
-
-  read();
+  })();
 }
 
 function head(stdin, args, done) {
@@ -37,7 +35,7 @@ function tail(stdin, args, done) {
 }
 
 function wc(stdin, args, done) {
-  if (!done) return (args.split("\n").length).toString();
+  if (!done) return (args.split("\n").length - 1).toString();
 
   fs.readFile(args[0], function(err, data) {
     if (err) throw err;

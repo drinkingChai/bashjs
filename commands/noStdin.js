@@ -10,7 +10,7 @@ function echo(stdin, args, done) {
   if (!done) return args
 
   done(args.reduce(function(acc, item) {
-    if (item[0] === '$') return acc += process.env[args[0].slice(1)] + " "
+    if (item[0] === '$') return acc += process.env[item.slice(1)] + " "
     else return acc += item + " ";
   }, "").trim(), stdin);
 }
