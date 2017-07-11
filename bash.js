@@ -9,10 +9,7 @@ var done = function(output, stdin) {
     if (pipeCmdList.length > 1) stdin.unshift(pipeCmdList[1]);
     output = commands[pipeCmdList[0]](stdin, output);
   }
-  process.stdout.write(output);
-
-  // show the prompt
-  process.stdout.write('\nprompt > ');
+  process.stdout.write(output + '\nprompt > ');
 }
 
 // Output a prompt
@@ -24,7 +21,6 @@ process.stdin.on('data', function (data) {
     process.stdout.write('prompt > ');
   } else {
     var cmdList = data.toString().trim().split(/\s*\|\s*/g); // any amount of whitespace, pipe, any amount of whitespace
-
     var initCmd = cmdList[0].split(' ')[0];
     var args = cmdList[0].split(' ').slice(1);
 

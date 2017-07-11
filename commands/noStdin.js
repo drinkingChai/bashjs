@@ -16,7 +16,9 @@ function echo(stdin, args, done) {
 }
 
 function curl(stdin, args, done) {
-  request(args[0], function(err, res, body) {
+  var url = args[0];
+  if (url.slice(0, 7) !== 'http://' || url.slice(0, 8) !== 'https://') url = 'http://' + url
+  request(url, function(err, res, body) {
     if (err) throw err;
     done(body, stdin);
   })

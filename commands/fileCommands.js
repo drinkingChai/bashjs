@@ -24,8 +24,7 @@ function head(stdin, args, done) {
 
 function tail(stdin, args, done) {
   if (!done) {
-    var stringSplit = args.toString().split('\n');
-    return stringSplit.slice(stringSplit.length - 5).join('\n');
+    return args.toString().split('\n').slice(-5).join('\n');
   }
 
   fs.readFile(args[0], function(err, data) {
@@ -35,11 +34,11 @@ function tail(stdin, args, done) {
 }
 
 function wc(stdin, args, done) {
-  if (!done) return (args.split("\n").length - 1).toString();
+  if (!done) return (args.split("\n").length);
 
   fs.readFile(args[0], function(err, data) {
     if (err) throw err;
-    done((data.toString().split("\n").length - 1).toString(), stdin);
+    done((data.toString().split("\n").length), stdin);
   })
 }
 
@@ -60,11 +59,7 @@ function uniq(stdin, args, done) {
 
 function sort(stdin, args, done) {
   function sortLines(fileData) {
-    var stringSplit = fileData.toString().split('\n').map(function(item) {
-      return item;
-    });
-    stringSplit.sort();
-    return stringSplit.join('\n');
+    return fileData.split('\n').sort().join('\n');
   }
 
   if (!done) return sortLines(args)
