@@ -3,12 +3,12 @@ var commands = require('./commands/index');
 var chalk = require('chalk');
 
 
-var prompt = '\nprompt > ';
+var prompt = 'prompt > ';
 var cmdList = [];
 
-var done = function(output, stdin) {
+var done = function(output) {
   if (cmdList.length) pipe(cmdList.shift(), output);
-  else process.stdout.write(output + prompt);
+  else process.stdout.write(output.toString() + '\n' + prompt);
 }
 
 var pipe = function(cmdString, lastOutput) {

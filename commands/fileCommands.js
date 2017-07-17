@@ -8,7 +8,7 @@ function cat (stdin, args, done) {
       if (err) throw err;
       contentArr[i++] = data;
       if (args.length > 0) read();
-      else done(contentArr.join(''), stdin);
+      else done(contentArr.join(''));
     });
   })();
 }
@@ -19,7 +19,7 @@ function head(stdin, args, done) {
 
   function returnOutput(err, data) {
     if (err) throw err;
-    done(data.toString().split('\n').slice(0, 5).join('\n'), stdin);
+    done(data.toString().split('\n').slice(0, 5).join('\n'));
   }
 }
 
@@ -29,7 +29,7 @@ function tail(stdin, args, done) {
 
   function returnOutput(err, data) {
     if (err) throw err;
-    done(data.toString().split('\n').slice(-5).join('\n'), stdin);
+    done(data.toString().split('\n').slice(-5).join('\n'));
   }
 }
 
@@ -39,7 +39,7 @@ function wc(stdin, args, done) {
 
   function returnOutput(err, data) {
     if (err) throw err;
-    done((data.toString().split("\n").length), stdin);
+    done((data.toString().split("\n").length));
   }
 }
 
@@ -50,7 +50,7 @@ function uniq(stdin, args, done) {
   function returnOutput(err, data) {
     done(data.toString().split("\n").filter(function(item, i, arr) {
       if (i == 0 || item !== arr[i - 1]) return item;
-    }).join("\n"), stdin);
+    }).join("\n"));
   }
 }
 
@@ -60,7 +60,7 @@ function sort(stdin, args, done) {
 
   function returnOutput(err, data) {
     if (err) throw err;
-    done(data.toString().split('\n').sort().join('\n'), stdin);
+    done(data.toString().split('\n').sort().join('\n'));
   }
 }
 
@@ -73,7 +73,7 @@ function grep(stdin, args, done) {
 
   function returnOutput(err, data) {
     if (err) throw err;
-    done(matchLines(data, searchStr), stdin);
+    done(matchLines(data, searchStr));
   }
 
   function matchLines(data, str) {

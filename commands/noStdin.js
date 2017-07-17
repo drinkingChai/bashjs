@@ -3,14 +3,14 @@ var request = require('request');
 
 
 function date(stdin, args, done) {
-  done(Date(), stdin);
+  done(Date());
 }
 
 function echo(stdin, args, done) {
   done(args.reduce(function(acc, item) {
     if (item[0] === '$') return acc += process.env[item.slice(1)] + " "
     else return acc += item + " ";
-  }, "").trim(), stdin);
+  }, "").trim());
 }
 
 function curl(stdin, args, done) {
@@ -18,7 +18,7 @@ function curl(stdin, args, done) {
   if (url.slice(0, 7) !== 'http://' || url.slice(0, 8) !== 'https://') url = 'http://' + url
   request(url, function(err, res, body) {
     if (err) throw err;
-    done(body, stdin);
+    done(body);
   })
 }
 
